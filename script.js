@@ -21,6 +21,15 @@ const PORTFOLIO_DATA = {
 };
 
 // --- BACKGROUND ENGINES ---
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
 class MatrixEngine {
     constructor() {
         this.canvas = document.getElementById('matrix-canvas');
@@ -30,7 +39,7 @@ class MatrixEngine {
         this.chars = '01XYZ<>[]{}@#$%&*+=_';
         this.columns = 0;
         
-        window.addEventListener('resize', () => this.init());
+        window.addEventListener('resize', debounce(() => this.init(), 250));
         this.init();
         this.draw();
     }
@@ -64,7 +73,7 @@ class PixelEngine {
         this.cols = 0;
         this.rows = 0;
 
-        window.addEventListener('resize', () => this.init());
+        window.addEventListener('resize', debounce(() => this.init(), 250));
         this.init();
         this.animate();
     }
