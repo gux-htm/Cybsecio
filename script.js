@@ -172,8 +172,9 @@ function renderPortfolio() {
     // Projects
     const projectsList = document.getElementById('projects-list');
     if (projectsList) {
+        let projectsHtml = '';
         PORTFOLIO_DATA.projects.forEach(p => {
-            projectsList.innerHTML += `
+            projectsHtml += `
                 <div class="tactical-frame group">
                     <div class="tl corner"></div><div class="tr corner"></div><div class="bl corner"></div><div class="br corner"></div>
                     <div class="aspect-video relative overflow-hidden mb-4 border border-cyber-yellow/20">
@@ -184,6 +185,7 @@ function renderPortfolio() {
                     <div class="text-[9px] border border-cyber-yellow/40 px-2 py-1 font-bold inline-block">${p.tech}</div>
                 </div>`;
         });
+        projectsList.innerHTML = projectsHtml;
     }
 }
 
