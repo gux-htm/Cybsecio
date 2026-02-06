@@ -24,6 +24,9 @@ const PORTFOLIO_DATA = {
 function debounce(func, wait) {
     let timeout;
     return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
@@ -38,6 +41,7 @@ class MatrixEngine {
         this.chars = '01XYZ<>[]{}@#$%&*+=_';
         this.columns = 0;
         
+        window.addEventListener('resize', debounce(() => this.init(), 250));
         window.addEventListener('resize', debounce(() => this.init(), 200));
         this.init();
         this.draw();
@@ -75,6 +79,7 @@ class PixelEngine {
         this.buf32 = null;
         this.isLittleEndian = true;
 
+        window.addEventListener('resize', debounce(() => this.init(), 250));
         window.addEventListener('resize', debounce(() => this.init(), 200));
         this.init();
         this.animate();
