@@ -63,6 +63,9 @@ class PixelEngine {
         this.grid = [];
         this.cols = 0;
         this.rows = 0;
+        this.imageData = null;
+        this.buf32 = null;
+        this.isLittleEndian = true;
 
         window.addEventListener('resize', () => this.init());
         this.init();
@@ -74,18 +77,46 @@ class PixelEngine {
         this.cols = Math.ceil(this.canvas.width / this.pixelSize);
         this.rows = Math.ceil(this.canvas.height / this.pixelSize);
         this.grid = new Array(this.cols * this.rows).fill(0).map(() => Math.random() > 0.9 ? 1 : 0);
+
+        this.imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
+        this.buf32 = new Uint32Array(this.imageData.data.buffer);
+        this.isLittleEndian = new Uint8Array(new Uint32Array([0x12345678]).buffer)[0] === 0x78;
     }
     animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#FF0';
+        this.buf32.fill(0);
+
+        const width = this.canvas.width;
+        const height = this.canvas.height;
+        const drawSize = this.pixelSize - 1;
+
         for (let i = 0; i < this.cols; i++) {
             for (let j = 0; j < this.rows; j++) {
                 if (this.grid[j * this.cols + i] === 1) {
-                    this.ctx.globalAlpha = 0.05 + Math.random() * 0.1;
-                    this.ctx.fillRect(i * this.pixelSize, j * this.pixelSize, this.pixelSize - 1, this.pixelSize - 1);
+                    const x = i * this.pixelSize;
+                    const y = j * this.pixelSize;
+                    const alpha = Math.floor((0.05 + Math.random() * 0.1) * 255);
+                    let color;
+
+                    if (this.isLittleEndian) {
+                        color = 0x00FFFF | (alpha << 24);
+                    } else {
+                        color = 0xFFFF0000 | alpha;
+                    }
+
+                    for (let dy = 0; dy < drawSize; dy++) {
+                        if (y + dy >= height) continue;
+                        const rowOffset = (y + dy) * width;
+                        for (let dx = 0; dx < drawSize; dx++) {
+                            if (x + dx >= width) continue;
+                            this.buf32[rowOffset + x + dx] = color;
+                        }
+                    }
                 }
             }
         }
+
+        this.ctx.putImageData(this.imageData, 0, 0);
+
         if (Math.random() > 0.9) this.grid[Math.floor(Math.random() * this.grid.length)] = Math.random() > 0.5 ? 1 : 0;
         setTimeout(() => requestAnimationFrame(() => this.animate()), 100);
     }
