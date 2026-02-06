@@ -134,13 +134,14 @@ function renderPortfolio() {
     // Skills
     const skillList = document.getElementById('skills-list');
     if (skillList) {
+        let skillsHtml = '';
         PORTFOLIO_DATA.skills.forEach(s => {
             const blocks = Math.floor(s.value / 5);
             let blocksHtml = '';
             for(let i=0; i<20; i++) {
                 blocksHtml += `<div class="h-4 w-2 sm:w-3 skew-x-[-20deg] ${i < blocks ? 'bg-cyber-yellow' : 'bg-cyber-yellow/10'}"></div>`;
             }
-            skillList.innerHTML += `
+            skillsHtml += `
                 <div class="space-y-2">
                     <div class="flex justify-between text-[10px] font-black tracking-widest uppercase">
                         <span>${s.name}</span>
@@ -149,13 +150,15 @@ function renderPortfolio() {
                     <div class="flex gap-1 overflow-hidden">${blocksHtml}</div>
                 </div>`;
         });
+        skillList.innerHTML = skillsHtml;
     }
 
     // Certs
     const certsList = document.getElementById('certs-list');
     if (certsList) {
+        let certsHtml = '';
         PORTFOLIO_DATA.certs.forEach(c => {
-            certsList.innerHTML += `
+            certsHtml += `
                 <div class="py-4 flex justify-between items-center group cursor-pointer hover:bg-cyber-yellow/5 px-2 transition-all">
                     <div class="flex items-center gap-4">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF0" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/><path d="M15 7a6 6 0 1 0-12 0 6 6 0 0 0 12 0Z"/></svg>
@@ -167,13 +170,15 @@ function renderPortfolio() {
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="opacity-30 group-hover:opacity-100"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="m15 3 6 6"/><path d="M10 14 21 3"/></svg>
                 </div>`;
         });
+        certsList.innerHTML = certsHtml;
     }
 
     // Projects
     const projectsList = document.getElementById('projects-list');
     if (projectsList) {
+        let projectsHtml = '';
         PORTFOLIO_DATA.projects.forEach(p => {
-            projectsList.innerHTML += `
+            projectsHtml += `
                 <div class="tactical-frame group">
                     <div class="tl corner"></div><div class="tr corner"></div><div class="bl corner"></div><div class="br corner"></div>
                     <div class="aspect-video relative overflow-hidden mb-4 border border-cyber-yellow/20">
@@ -184,6 +189,7 @@ function renderPortfolio() {
                     <div class="text-[9px] border border-cyber-yellow/40 px-2 py-1 font-bold inline-block">${p.tech}</div>
                 </div>`;
         });
+        projectsList.innerHTML = projectsHtml;
     }
 }
 
