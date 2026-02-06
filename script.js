@@ -134,13 +134,14 @@ function renderPortfolio() {
     // Skills
     const skillList = document.getElementById('skills-list');
     if (skillList) {
+        let skillsHtml = '';
         PORTFOLIO_DATA.skills.forEach(s => {
             const blocks = Math.floor(s.value / 5);
             let blocksHtml = '';
             for(let i=0; i<20; i++) {
                 blocksHtml += `<div class="h-4 w-2 sm:w-3 skew-x-[-20deg] ${i < blocks ? 'bg-cyber-yellow' : 'bg-cyber-yellow/10'}"></div>`;
             }
-            skillList.innerHTML += `
+            skillsHtml += `
                 <div class="space-y-2">
                     <div class="flex justify-between text-[10px] font-black tracking-widest uppercase">
                         <span>${s.name}</span>
@@ -149,6 +150,7 @@ function renderPortfolio() {
                     <div class="flex gap-1 overflow-hidden">${blocksHtml}</div>
                 </div>`;
         });
+        skillList.innerHTML = skillsHtml;
     }
 
     // Certs
